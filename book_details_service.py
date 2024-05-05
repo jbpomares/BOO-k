@@ -1,4 +1,3 @@
-# book_details_service.py
 import requests
 
 def get_book_details(book_identifier):
@@ -18,13 +17,29 @@ def get_book_details(book_identifier):
         # Parse the JSON response
         data = response.json()
 
-        # Extract detailed information about the book (e.g., title, authors, description, etc.)
+        # Extract detailed information about the book
         book_details = data.get("volumeInfo", {})
 
-        return book_details
+        # Extract specific fields from the book details
+        extracted_details = extract_book_details(book_details)
+
+        return extracted_details
     else:
         print("Error: Failed to fetch book details.")
         return {}
+
+def extract_book_details(book_details):
+    # Extract specific fields from the book details
+    extracted_details = {
+        'title': book_details.get('title', ''),
+        'authors': book_details.get('authors', []),
+        'publisher': book_details.get('publisher', ''),
+        'publishedDate': book_details.get('publishedDate', ''),
+        'description': book_details.get('description', ''),
+        # Add more fields as needed...
+    }
+
+    return extracted_details
 
 # Test the get_book_details function
 if __name__ == "__main__":
@@ -32,3 +47,4 @@ if __name__ == "__main__":
     details = get_book_details(book_identifier)
     print("Book Details:")
     print(details)
+

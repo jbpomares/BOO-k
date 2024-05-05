@@ -1,4 +1,3 @@
-# search_service.py
 import requests
 import book_details_service
 

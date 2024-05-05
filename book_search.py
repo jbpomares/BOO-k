@@ -1,5 +1,3 @@
-# book_search.py
-
 def print_banner():
     print("d8888b.  .d88b.   .d88b.  db db   dD ")
     print("88  `8D .8P  Y8. .8P  Y8. 88 88 ,8P'")

@@ -27,7 +27,7 @@ def main():
     channel = connection.channel()
 
     # Declare the exchange
-    channel.exchange_declare(exchange='book_search', exchange_type='fanout')
+    channel.exchange_declare(exchange='book_search', exchange_type='fanout', durable=True)
 
     # Publish the search request message
     channel.basic_publish(exchange='book_search', routing_key='', body=book_title)

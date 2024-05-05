@@ -1,3 +1,6 @@
+# book_search.py
+import pika
+
 def print_banner():
     print("d8888b.  .d88b.   .d88b.  db db   dD ")
     print("88  `8D .8P  Y8. .8P  Y8. 88 88 ,8P'")
@@ -18,7 +21,22 @@ def search_book():
 def main():
     print_banner()
     book_title = search_book()
-    print(f"You entered: {book_title}")
+
+    # Connect to RabbitMQ server
+    connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+    channel = connection.channel()
+
+    # Declare the exchange
+    channel.exchange_declare(exchange='book_search', exchange_type='fanout')
+
+    # Publish the search request message
+    channel.basic_publish(exchange='book_search', routing_key='', body=book_title)
+
+    print(f"Search request for '{book_title}' has been sent to RabbitMQ.")
+
+    # Close the connection
+    connection.close()
 
 if __name__ == "__main__":
     main()
+

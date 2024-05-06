@@ -38,7 +38,7 @@ def main():
         # publish search request message
         channel.basic_publish(exchange='book_search', routing_key='', body=book_title)
 
-        print(f"Search request for '{book_title}' has been sent to RabbitMQ.")
+        print(f"Search request for '{book_title}' has been sent. Navigate to search results screen to make your selection.")
 
         # close connection
         connection.close()

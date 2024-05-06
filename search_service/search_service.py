@@ -112,28 +112,37 @@ def on_message(channel, method, properties, body):
     book_titles = body.decode().split(',')
     search_results = search_books(book_titles)
 
-    # print the search results
+    # Print the search results
     for i, result in enumerate(search_results, start=1):
         print(f"{i}. {result['title']} by {', '.join(result['authors'])}")
 
-    # prompt user to select a book via a number
-    selection = input("Enter the number of the book you want to view details for: ")
+    while True:
+        # Prompt the user to select a book via a number
+        selection = input("Enter the number of the book you want to view details for: ")
 
-    try:
-        selection_index = int(selection)
-        selected_book = search_results[selection_index - 1]
+        try:
+            selection_index = int(selection)
+            selected_book = search_results[selection_index - 1]
 
-        # get book details for the book user chose
-        book_identifier = get_book_identifier(selected_book['title'])
-        book_details = get_book_details(book_identifier)
+            # Get book details for the book the user chose
+            book_identifier = get_book_identifier(selected_book['title'])
+            book_details = get_book_details(book_identifier)
 
-        # print details
-        print("Title:", book_details['title'])
-        print("Authors:", ', '.join(book_details['authors']))
-        print("Description:", book_details['description'])
+            # Create bold font
+            BOLD = '\033[1m'
+            END_BOLD = '\033[0m'
 
-    except (ValueError, IndexError):
-        print("Invalid selection. Please enter a valid number.")
+            # Print book details
+            print(f"{BOLD}Title:{END_BOLD} {book_details['title']}")
+            print(f"{BOLD}Authors:{END_BOLD} {', '.join(book_details['authors'])}")
+            print(f"{BOLD}Description:{END_BOLD} {book_details['description']}")
+            print("Return back to book search screen to input another search")
+
+            break  # Exit the loop if the input is valid
+
+        except (ValueError, IndexError):
+            print("Invalid selection. Please enter a valid number.")
+
 
     
 

@@ -10,6 +10,9 @@ def print_banner():
     print("Welcome to BOO!k - Your FREE command-line book searching tool")
     print("Enter book names below to find a book to add to your reading list.")
     print("This tool will return books based on your search from the Google Books API.")
+    print("You can search for books by title, author, or ISBN number.")
+    print("You will be given a list of search results in the search service window.")
+    print("Select a number associated with the result to get the details on the book")
     print("Type 'help' to see a list of commands.")
     print("Type 'exit' to quit the program.")
 
@@ -25,19 +28,19 @@ def main():
         if book_title.lower() == 'exit':
             break
 
-        # Connect to RabbitMQ server
+        # connect to RabbitMQ server
         connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
         channel = connection.channel()
 
-        # Declare the exchange
+        # declare exchange
         channel.exchange_declare(exchange='book_search', exchange_type='fanout', durable=True)
 
-        # Publish the search request message
+        # publish search request message
         channel.basic_publish(exchange='book_search', routing_key='', body=book_title)
 
         print(f"Search request for '{book_title}' has been sent to RabbitMQ.")
 
-        # Close the connection
+        # close connection
         connection.close()
 
 if __name__ == "__main__":

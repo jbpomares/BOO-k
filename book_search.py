@@ -1,4 +1,3 @@
-# book_search.py
 import pika
 
 def print_banner():
@@ -20,23 +19,28 @@ def search_book():
 
 def main():
     print_banner()
-    book_title = search_book()
+    while True:
+        book_title = search_book()
 
-    # Connect to RabbitMQ server
-    connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
-    channel = connection.channel()
+        if book_title.lower() == 'exit':
+            break
 
-    # Declare the exchange
-    channel.exchange_declare(exchange='book_search', exchange_type='fanout', durable=True)
+        # Connect to RabbitMQ server
+        connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+        channel = connection.channel()
 
-    # Publish the search request message
-    channel.basic_publish(exchange='book_search', routing_key='', body=book_title)
+        # Declare the exchange
+        channel.exchange_declare(exchange='book_search', exchange_type='fanout', durable=True)
 
-    print(f"Search request for '{book_title}' has been sent to RabbitMQ.")
+        # Publish the search request message
+        channel.basic_publish(exchange='book_search', routing_key='', body=book_title)
 
-    # Close the connection
-    connection.close()
+        print(f"Search request for '{book_title}' has been sent to RabbitMQ.")
+
+        # Close the connection
+        connection.close()
 
 if __name__ == "__main__":
     main()
+
 
